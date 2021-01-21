@@ -1,0 +1,19 @@
+# Ignore .gradle directories
+.gradle
+
+# Ignore build & run directories
+bin
+build
+logs
+run
+
+# Ignore Eclipse IDE
+.settings
+.classpath
+.project
+
+# Ignore IntelliJ IDE
+.idea
+
+# Ignore VSCode
+.vscode
