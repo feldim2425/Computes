@@ -1,6 +1,7 @@
 package mods.feldim2425.computes
 
 import mods.feldim2425.computes.common.Register
+import mods.feldim2425.computes.font.UniFontUtil
 import mods.feldim2425.computes.network.NetworkRegister
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
@@ -19,12 +20,12 @@ object Computes {
     val LOGGER: Logger = LogManager.getLogger()
 
     init {
-        LOGGER.log(Level.INFO, "Hello world!")
-
         // Register the KDeferredRegister to the mod-specific event bus
 
         Register.init()
         NetworkRegister.init()
+
+        UniFontUtil.initialize()
 
         // usage of the KotlinEventBus
         MOD_BUS.addListener(::onClientSetup)
