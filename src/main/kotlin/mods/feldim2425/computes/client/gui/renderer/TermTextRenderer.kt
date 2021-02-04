@@ -30,8 +30,8 @@ class TermTextRenderer(var buffer: TextBuffer) {
         val texIdN = GL11.glGenTextures()
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texIdN)
 
-        val relsize = UniFontUtil.getCharacterWidth(0x2661)
-        val img = tex.getImage(0x2661)
+        val relsize = UniFontUtil.getCharacterWidth(0x1f43c)
+        val img = tex.getImage(0x1f43c)
         GL11.glTexImage2D(
             GL11.GL_TEXTURE_2D,
             0,
