@@ -29,20 +29,25 @@ class FontProvider(fontstream: InputStream) : IFontSizeProvider, ITermGlyphProvi
                     var intlen = 0
                     val lineval = parts[1].trim()
                     when (lineval.length) {
-                        32, 64 -> intlen = lineval.length / 2
+                        32 -> intlen = 1
+                        64 -> intlen = 2
                         else -> {
                             throw Exception("Unifontutil failed to initialize! Invalid lenght in file ${UniFontUtil.UNIFONT_HEX}! Requires length 32 or 64!")
                         }
                     }
 
-                    charlen[addr] = Array(intlen) { 0 }
-                    for (i in 0 until intlen) {
-                        charlen[addr]!![i] = Integer.parseInt(
-                            lineval.subSequence(
-                                i * 2,
-                                (i + 1) * 2
-                            ) as String?, 16
-                        ).toByte()
+                    charlen[addr] = Array(intlen * 16) { 0 }
+                    for (i in 0 until 16) {
+                        for (j in 0 until intlen) {
+                            val seq = (i * intlen) + j
+                            val idx = (i * intlen) + (intlen - j - 1)
+                            charlen[addr]!![idx] = Integer.parseInt(
+                                lineval.subSequence(
+                                    seq * 2,
+                                    (seq + 1) * 2
+                                ) as String?, 16
+                            ).toByte()
+                        }
                     }
                 } catch (e: NumberFormatException) {
                     throw Exception("Unifontutil failed to initialize! Error parsing file ${UniFontUtil.UNIFONT_HEX}")
@@ -50,7 +55,6 @@ class FontProvider(fontstream: InputStream) : IFontSizeProvider, ITermGlyphProvi
             }
         }
     }
-
 
     override fun getCharacterWidth(ch: Int): Int {
         if (ch >= charlen.size) {
@@ -91,5 +95,6 @@ class FontProvider(fontstream: InputStream) : IFontSizeProvider, ITermGlyphProvi
     override fun getSingleChSize(): Tuple<Int, Int> {
         return CHAR_SIZE
     }
+
 }
 
