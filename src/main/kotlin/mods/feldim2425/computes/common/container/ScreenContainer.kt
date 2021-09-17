@@ -17,13 +17,13 @@ class ScreenContainer(windowId: Int, entity: TileEntity?, inv: PlayerInventory) 
 
     constructor(windowId: Int, inv: PlayerInventory, data: PacketBuffer) : this(
         windowId,
-        inv.player.world.getTileEntity(data.readBlockPos()),
+        inv.player.level.getBlockEntity(data.readBlockPos()),
         inv
     )
 
-    override fun canInteractWith(playerIn: PlayerEntity): Boolean {
-        return isWithinUsableDistance(
-            IWorldPosCallable.of(tileentity.world!!, tileentity.pos),
+    override fun stillValid(playerIn: PlayerEntity): Boolean {
+        return Container.stillValid(
+            IWorldPosCallable.create(tileentity.level!!, tileentity.blockPos),
             this.inventory.player,
             Register.COMPUTER_BLOCK.get()
         )

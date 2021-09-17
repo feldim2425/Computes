@@ -17,13 +17,13 @@ import net.minecraft.world.IBlockReader
 import net.minecraft.world.World
 import net.minecraftforge.fml.network.NetworkHooks
 
-class ComputerBlock : ContainerBlock(AbstractBlock.Properties.create(Material.IRON)) {
+class ComputerBlock : ContainerBlock(AbstractBlock.Properties.of(Material.HEAVY_METAL)) {
 
-    override fun getRenderType(state: BlockState): BlockRenderType {
+    override fun getRenderShape(state: BlockState): BlockRenderType {
         return BlockRenderType.MODEL
     }
 
-    override fun onBlockActivated(
+    override fun use(
         state: BlockState,
         worldIn: World,
         pos: BlockPos,
@@ -31,11 +31,11 @@ class ComputerBlock : ContainerBlock(AbstractBlock.Properties.create(Material.IR
         handIn: Hand,
         hit: BlockRayTraceResult
     ): ActionResultType {
-        if (worldIn.isRemote) {
+        if (worldIn.isClientSide) {
             return ActionResultType.SUCCESS
         }
 
-        val tile = worldIn.getTileEntity(pos)
+        val tile = worldIn.getBlockEntity(pos)
         if (tile !is TileComputer || player !is ServerPlayerEntity) {
             return ActionResultType.FAIL
         }
@@ -44,7 +44,7 @@ class ComputerBlock : ContainerBlock(AbstractBlock.Properties.create(Material.IR
         return ActionResultType.SUCCESS
     }
 
-    override fun createNewTileEntity(worldIn: IBlockReader): TileEntity? {
+    override fun newBlockEntity(worldIn: IBlockReader): TileEntity? {
         return TileComputer()
     }
 }

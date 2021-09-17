@@ -1,8 +1,10 @@
 package mods.feldim2425.computes
 
+import mods.feldim2425.computes.client.gui.ScreenScreen
 import mods.feldim2425.computes.common.Register
 import mods.feldim2425.computes.font.UniFontUtil
 import mods.feldim2425.computes.network.NetworkRegister
+import net.minecraft.client.gui.ScreenManager
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent
@@ -30,6 +32,8 @@ object Computes {
         // usage of the KotlinEventBus
         MOD_BUS.addListener(::onClientSetup)
         FORGE_BUS.addListener(::onServerAboutToStart)
+
+        MOD_BUS.addListener(::clientInit)
     }
 
     /**
@@ -46,5 +50,9 @@ object Computes {
      */
     private fun onServerAboutToStart(event: FMLServerAboutToStartEvent) {
         LOGGER.log(Level.INFO, "Server starting...")
+    }
+
+    private fun clientInit(event: FMLClientSetupEvent) {
+        ScreenManager.register(Register.SCREEN_CONTAINER.get(), ::ScreenScreen)
     }
 }

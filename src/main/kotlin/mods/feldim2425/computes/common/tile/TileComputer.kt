@@ -23,7 +23,7 @@ class TileComputer : TileEntity(Register.COMPUTER_TILE.get()), ITickableTileEnti
     var tick = 0
 
     override fun tick() {
-        if (this.world == null || this.world!!.isRemote) {
+        if (this.level == null || this.level!!.isClientSide) {
             return
         }
 
@@ -31,8 +31,8 @@ class TileComputer : TileEntity(Register.COMPUTER_TILE.get()), ITickableTileEnti
             buffer.setClear()
             NetworkRegister.getChannel()
                 .send(
-                    PacketDistributor.TRACKING_CHUNK.with { -> this.world?.getChunk(this.pos) as Chunk? },
-                    ScreenPacket(pos, buffer.size, buffer.textBuffer)
+                    PacketDistributor.TRACKING_CHUNK.with { -> this.level?.getChunk(this.blockPos) as Chunk? },
+                    ScreenPacket(blockPos, buffer.size, buffer.textBuffer)
                 )
         }
         down++
@@ -56,7 +56,7 @@ class TileComputer : TileEntity(Register.COMPUTER_TILE.get()), ITickableTileEnti
             buffer.writeString("|⣿⣦⡀⣿⣿⣷⣶⣬⣍⣛⣛⣛⡛⠿⠿⠿⠛⠛⢛⣛⣉⣭⣤⣂⢜⠕⢑⣡⣴⣿|", 0, 15);
             buffer.writeString("+------------------------------+", 0, 16);
             tick++
-            
+
         }
     }
 

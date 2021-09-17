@@ -47,14 +47,14 @@ class ScreenPacket private constructor() : IPacket {
         }
 
         ctx.get().enqueueWork {
-            val tile = Minecraft.getInstance().player?.world?.getTileEntity(this.screenPos)
+            val tile = Minecraft.getInstance().player?.clientLevel?.getBlockEntity(this.screenPos)
             if (tile !is TileComputer) {
                 return@enqueueWork
             }
             tile.getBuffer().update(size, chars)
 
-            val screen = Minecraft.getInstance().currentScreen
-            if (screen is ScreenScreen && screen.container.tileentity == tile) {
+            val screen = Minecraft.getInstance().screen
+            if (screen is ScreenScreen && screen.menu.tileentity == tile) {
                 screen.updateScreen()
             }
         }
